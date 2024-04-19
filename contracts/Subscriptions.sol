@@ -5,6 +5,16 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Subscription is Ownable {
+    struct Service {
+        uint256 serviceId;
+        string name;
+        string description;
+        string url;
+        uint256 subscribers;
+        uint256 subscriptionAmount;
+        bool isPublic;
+    }
+
     struct SubscriptionDetails {
         uint256 serviceId;
         uint256 amount;
@@ -13,28 +23,56 @@ contract Subscription is Ownable {
     }
 
     IERC20 public token;
+    uint256 public serviceCount;
 
     address[] public subscribers;
     address[] public failedTransactions;
 
     mapping(address => SubscriptionDetails[]) public subscriptions;
+    mapping(uint256 => Service) public services;
+
+    modifier serviceExists(uint256 _serviceId) {
+        require(serviceCount < _serviceId, "serviceExists::service does not exist");
+        _;
+    }
 
     constructor(IERC20 _token) Ownable(msg.sender) {
         token = _token;
+        serviceCount = 0;
+    }
+
+    function createService(
+        string memory _name,
+        string memory _description,
+        string memory _url,
+        uint256 _subscriptionAmount,
+        bool _isPublic
+    ) external {
+        services[serviceCount] = Service(
+            serviceCount,
+            _name,
+            _description,
+            _url,
+            0,
+            _subscriptionAmount,
+            _isPublic
+        );
+        serviceCount += 1;
     }
 
     function subscribe(
         uint256 _serviceId,
         uint256 _amount,
         uint256 _duration
-    ) external {
+    ) external serviceExists(_serviceId) {
         require(_amount > 0, "subscribe::amount must be greater than 0");
         require(_duration > 0, "subscribe::duration must be greater than 0");
 
         token.approve(address(this), type(uint256).max);
+        Service memory service = services[_serviceId];
 
         subscriptions[msg.sender].push(
-            SubscriptionDetails(_serviceId, _amount, _duration, block.timestamp)
+            SubscriptionDetails(_serviceId, service.subscriptionAmount, _duration, block.timestamp)
         );
         subscribers.push(msg.sender);
     }
