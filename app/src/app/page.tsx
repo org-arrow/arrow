@@ -10,13 +10,19 @@ import { FC, useState } from "react"
 const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
   const { address, connect } = useConnectWallet()
-  
+
   return (
     <Wrapper className="p-8 max-w-md mx-auto">
       <Header address={address} connect={connect} />
-      <Wrapper>
-        <LLMInput />
-      </Wrapper>
+      {address ? (
+        <Wrapper>
+          <LLMInput />
+        </Wrapper>
+      ) : (
+        <div className="flex items-center justify-center p-10 border rounded-md text-sm text-gray-600 font-bold">
+          Connect your wallet
+        </div>
+      )}
       {address && <ScanDropdown setQrcodeResult={setQrcodeResult} />}
     </Wrapper>
   )
