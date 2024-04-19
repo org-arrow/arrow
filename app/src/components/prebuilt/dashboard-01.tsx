@@ -1,3 +1,5 @@
+// PRE-BUILT COMPONENT - https://ui.shadcn.com/blocks#dashboard-01
+
 import Link from "next/link"
 import {
   Activity,
