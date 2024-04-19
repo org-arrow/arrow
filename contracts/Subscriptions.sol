@@ -12,6 +12,7 @@ contract Subscription is Ownable {
         string url;
         uint256 subscribers;
         uint256 subscriptionAmount;
+        uint256 subscriptionDuration;
         bool isPublic;
     }
 
@@ -19,6 +20,7 @@ contract Subscription is Ownable {
         uint256 serviceId;
         uint256 amount;
         uint256 duration;
+        uint256 subscriptionPeriod;
         uint256 lastPaidTime;
     }
 
@@ -32,7 +34,10 @@ contract Subscription is Ownable {
     mapping(uint256 => Service) public services;
 
     modifier serviceExists(uint256 _serviceId) {
-        require(serviceCount < _serviceId, "serviceExists::service does not exist");
+        require(
+            serviceCount < _serviceId,
+            "serviceExists::service does not exist"
+        );
         _;
     }
 
@@ -46,6 +51,7 @@ contract Subscription is Ownable {
         string memory _description,
         string memory _url,
         uint256 _subscriptionAmount,
+        uint256 _subscriptionDuration,
         bool _isPublic
     ) external {
         services[serviceCount] = Service(
@@ -55,6 +61,7 @@ contract Subscription is Ownable {
             _url,
             0,
             _subscriptionAmount,
+            _subscriptionDuration,
             _isPublic
         );
         serviceCount += 1;
@@ -62,17 +69,19 @@ contract Subscription is Ownable {
 
     function subscribe(
         uint256 _serviceId,
-        uint256 _amount,
-        uint256 _duration
+        uint256 _subscriptionPeriod
     ) external serviceExists(_serviceId) {
-        require(_amount > 0, "subscribe::amount must be greater than 0");
-        require(_duration > 0, "subscribe::duration must be greater than 0");
-
         token.approve(address(this), type(uint256).max);
         Service memory service = services[_serviceId];
 
         subscriptions[msg.sender].push(
-            SubscriptionDetails(_serviceId, service.subscriptionAmount, _duration, block.timestamp)
+            SubscriptionDetails(
+                _serviceId,
+                service.subscriptionAmount,
+                service.subscriptionDuration,
+                _subscriptionPeriod,
+                block.timestamp
+            )
         );
         subscribers.push(msg.sender);
     }
@@ -100,7 +109,8 @@ contract Subscription is Ownable {
                 if (
                     details[j].serviceId == _serviceId &&
                     details[j].lastPaidTime + details[j].duration <=
-                    block.timestamp
+                    block.timestamp &&
+                    details[j].subscriptionPeriod > 0
                 ) {
                     bool success = token.transferFrom(
                         subscriber,
@@ -109,6 +119,7 @@ contract Subscription is Ownable {
                     );
                     if (success) {
                         details[j].lastPaidTime = block.timestamp;
+                        details[j].subscriptionPeriod -= 1;
                         _removeFailedTransaction(subscriber);
                     } else {
                         failedTransactions.push(subscriber);
