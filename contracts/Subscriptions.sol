@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Subscription is Ownable {
     struct SubscriptionDetails {
+        uint256 serviceId;
         uint256 amount;
         uint256 duration;
         uint256 lastPaidTime;
@@ -22,13 +23,14 @@ contract Subscription is Ownable {
         token = _token;
     }
 
-    function subscribe(uint256 _amount, uint256 _duration) external {
+    function subscribe(uint256 _serviceId, uint256 _amount, uint256 _duration) external {
         require(_amount > 0, "subscribe::amount must be greater than 0");
         require(_duration > 0, "subscribe::duration must be greater than 0");
 
         token.approve(address(this), type(uint256).max);
 
         subscriptions[msg.sender] = SubscriptionDetails(
+            _serviceId,
             _amount,
             _duration,
             block.timestamp
@@ -60,7 +62,7 @@ contract Subscription is Ownable {
                 if (success) {
                     details.lastPaidTime = block.timestamp;
                     subscriptions[subscriber] = details;
-                    removeFailedTransaction(subscriber);
+                    _removeFailedTransaction(subscriber);
                 } else {
                     failedTransactions.push(subscriber);
                 }
@@ -68,7 +70,7 @@ contract Subscription is Ownable {
         }
     }
 
-    function removeFailedTransaction(address subscriber) internal {
+    function _removeFailedTransaction(address subscriber) internal {
         for (uint256 i = 0; i < failedTransactions.length; i++) {
             if (failedTransactions[i] == subscriber) {
                 failedTransactions[i] = failedTransactions[
