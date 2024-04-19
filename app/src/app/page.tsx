@@ -9,8 +9,8 @@ import { FC, useState } from "react"
 
 const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
-
   const { address, connect } = useConnectWallet()
+  
   return (
     <Wrapper className="p-8 max-w-md mx-auto">
       <Header address={address} connect={connect} />
