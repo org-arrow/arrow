@@ -9,7 +9,7 @@ interface Artifact {
 
 export const Contracts: Artifact = {
   11155111: {
-    address: "0xa9124a6a8d67e0ed14c04f63348a9241529233a7",
+    address: "0x7ca1b7c342e06352cce9d709ec4aa9ec3cc28414",
     abi: [
       {
         inputs: [

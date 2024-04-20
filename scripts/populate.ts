@@ -1,43 +1,47 @@
 import { task } from "hardhat/config";
-import { formatEther, parseEther } from "viem";
+import { parseEther } from "viem";
 
 task("populate", "Populate a contract with data.").setAction(
   async (_, { viem }) => {
     const contract = await viem.getContractAt(
       "Subscription",
-      "0xa9124a6a8d67e0ed14c04f63348a9241529233a7"
+      "0x7ca1b7c342e06352cce9d709ec4aa9ec3cc28414"
     );
 
-    // Create Netflix service
-    const tx1 = await contract.write.createService([
+    const tx0 = await contract.write.createService([
       "Netflix",
       "Subscription-based streaming service",
       "https://logo.clearbit.com/netflix.com",
-      parseEther("14"), // Monthly subscription price in USD
-      BigInt(30), // Subscription duration in days
-      true,
-    ]);
-
-    console.log(tx1);
-    // Create Amazon Prime service
-    const tx0 = await contract.write.createService([
-      "Amazon Prime",
-      "Subscription service offered by Amazon",
-      "https://logo.clearbit.com/amazon.com",
-      parseEther("119"), // Annual subscription price in USD
-      BigInt(365), // Subscription duration in days
+      parseEther("14.99"),
+      BigInt(30),
       true,
     ]);
 
     console.log(tx0);
 
-    // Create Gmail service
+    // Sleep for 5 seconds
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    const tx1 = await contract.write.createService([
+      "Amazon Prime",
+      "Subscription service offered by Amazon",
+      "https://logo.clearbit.com/amazon.com",
+      parseEther("119.95"),
+      BigInt(365),
+      true,
+    ]);
+
+    console.log(tx1);
+
+    // Sleep for 5 seconds
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
     const tx2 = await contract.write.createService([
       "Spotify",
       "Subscription-based music streaming service",
       "https://logo.clearbit.com/spotify.com",
-      parseEther("10"), // Gmail is free
-      BigInt(0), // No subscription duration for free services
+      parseEther("9.99"),
+      BigInt(0),
       true,
     ]);
 

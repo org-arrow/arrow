@@ -3,6 +3,7 @@
 import Header from "@/components/custom/header"
 import LLMInput from "@/components/custom/llm-input"
 import ScanDropdown from "@/components/custom/scan-dropdown"
+import ServiceCard from "@/components/custom/service-card"
 import Wrapper from "@/components/custom/wrapper"
 import useConnectWallet from "@/hooks/useConnectWallet"
 import useView from "@/hooks/useView"
@@ -14,14 +15,21 @@ const Root: FC = () => {
 
   const { data: allServices } = useView("getAllServices", [])
 
-  console.log(allServices)
-
   return (
     <Wrapper className="p-8 max-w-md mx-auto">
       <Header address={address} connect={connect} />
       {address ? (
         <Wrapper>
           <LLMInput />
+          {Object.keys(allServices || {}).length === 0 ? (
+            <div className="flex items-center justify-center p-10 border rounded-md text-sm text-gray-600 font-bold">
+              There are currently no services available
+            </div>
+          ) : (
+            allServices?.map((service: Service) => (
+              <ServiceCard key={service.serviceId} service={service} />
+            ))
+          )}
         </Wrapper>
       ) : (
         <div className="flex items-center justify-center p-10 border rounded-md text-sm text-gray-600 font-bold">
