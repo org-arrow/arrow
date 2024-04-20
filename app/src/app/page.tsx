@@ -22,10 +22,8 @@ const Root: FC = () => {
     []
   )
 
-  const { data: allSubscriptions }: { data: Subscription[] | undefined } = useView(
-    "getSubscriptions",
-    [address]
-  )
+  const { data: allSubscriptions }: { data: Subscription[] | undefined } =
+    useView("getSubscriptions", [address])
 
   useEffect(() => {
     if (qrcodeResult) {
@@ -41,7 +39,7 @@ const Root: FC = () => {
       {allServices && (
         <ConfirmSubscription
           isOpen={!!qrcodeResult}
-          service={allServices?.[0]}
+          service={allServices?.[Number(qrcodeResult)]}
         />
       )}
       <Wrapper className="p-8 max-w-md mx-auto">
@@ -62,18 +60,28 @@ const Root: FC = () => {
                 ) : (
                   <div className="flex flex-col gap-2">
                     {allServices?.map((service: Service) => (
-                      <ServiceCard key={service.serviceId} service={service} />
+                      <>
+                        {service.isPublic ? (
+                          <ServiceCard
+                            key={service.serviceId}
+                            service={service}
+                          />
+                        ) : null}
+                      </>
                     ))}
                   </div>
                 )}
               </TabsContent>
               <TabsContent value="subscriptions">
-              {Object.keys(allSubscriptions || {}).length === 0 ? (
-                <Notice text="You current have no active subscriptions" />
+                {Object.keys(allSubscriptions || {}).length === 0 ? (
+                  <Notice text="You current have no active subscriptions" />
                 ) : (
                   <div className="flex flex-col gap-2">
                     {allSubscriptions?.map((subscription: Subscription) => (
-                      <SubscriptionCard key={subscription.serviceId} subscription={subscription} />
+                      <SubscriptionCard
+                        key={subscription.serviceId}
+                        subscription={subscription}
+                      />
                     ))}
                   </div>
                 )}

@@ -43,6 +43,7 @@ import { Label } from "../ui/label"
 import { Checkbox } from "../ui/checkbox"
 import { getContract } from "@/utils/provider"
 import { toast } from "sonner"
+import QrCode from "react-qr-code"
 
 const Dashboard06: FC = () => {
   const [serviceName, setServiceName] = useState("")
@@ -234,23 +235,38 @@ const Dashboard06: FC = () => {
                     {service.subscriptionDuration.toString()} days
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Dialog>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem>Edit</DropdownMenuItem>
+                          <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DialogTrigger className="w-full">
+                            <DropdownMenuItem>Qrcode</DropdownMenuItem>
+                          </DialogTrigger>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                      <DialogContent>
+                        <QrCode
+                          style={{
+                            height: "420.69px",
+                            maxWidth: "100%",
+                            width: "100%",
+                          }}
+                          value={`${service.serviceId.toString()}`}
+                        />
+                      </DialogContent>
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}
