@@ -19,9 +19,9 @@ import {
 import { Button } from "../ui/button"
 import { SelectLabel } from "@radix-ui/react-select"
 import { Input } from "../ui/input"
-import { getContract } from "@/utils/provider"
+import { getContract, getGaslessContract } from "@/utils/provider"
 import { toast } from "sonner"
-import { CheckIcon, Share2Icon } from "@radix-ui/react-icons"
+import { CheckIcon, PaperPlaneIcon, Share2Icon } from "@radix-ui/react-icons"
 import { truncateAddress } from "@/utils/format"
 
 interface Props {
@@ -34,9 +34,7 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
   const [subscriptionToken, setSubscriptionToken] = useState("")
   const [durationAmount, setDurationAmount] = useState<number>()
   const [durationPeriod, setDurationPeriod] = useState("")
-  const [tx, setTx] = useState(
-    "0xe2544344fe76900b577f45e2f6a303832eeb5965d39dd5e6c39c9234555868dc"
-  )
+  const [tx, setTx] = useState("yu")
 
   const canSubscribe = subscriptionToken && durationAmount && durationPeriod
 
@@ -50,6 +48,26 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
       .then((tx) => {
         setTx(tx.hash)
         toast.success(`You have just subscribed to ${service.name}`)
+      })
+      .catch((e) => toast.error(e))
+  }
+
+  const Period: { [key: string]: string } = {
+    "86400": "Days",
+    "2629746": "Months",
+    "31556952": "Years",
+  }
+
+  const postOnTalkOnline = async () => {
+    const talkOnlineContract = await getGaslessContract()
+
+    await talkOnlineContract
+      .createPost(
+        `I just subscribed to ${service.name} for ${durationAmount} ${Period[durationPeriod as keyof typeof Period]} using the hottest new subscription service on the blockchain: https://todo.com`,
+        0
+      )
+      .then(() => {
+        toast.success(`You have just posted on talk.online`)
       })
       .catch((e) => toast.error(e))
   }
@@ -131,17 +149,17 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
                 </a>
               </p>
             </div>
-            <a
+            {/* <a
               className="w-full"
               href="https://talk.online"
               target="_blank"
               rel="noopener noreferrer"
-            >
-              <Button className="flex gap-2 w-full">
-                <Share2Icon />
-                <p>Share on talk.online</p>
-              </Button>
-            </a>
+            > */}
+            <Button className="flex gap-2 w-full" onClick={postOnTalkOnline}>
+              <p>Share on talk.online</p>
+              <PaperPlaneIcon />
+            </Button>
+            {/* </a> */}
           </DialogDescription>
         </DialogContent>
       )}
