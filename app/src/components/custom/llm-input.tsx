@@ -1,5 +1,7 @@
 // ADAPTED FROM: https://ui.shadcn.com/blocks#dashboard-03
 
+'use client'
+
 import { CornerDownLeft, Mic, Paperclip } from "lucide-react"
 
 import { Button } from "@/components/ui/button"

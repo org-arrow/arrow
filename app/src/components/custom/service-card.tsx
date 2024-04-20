@@ -9,18 +9,23 @@ import {
 import { Badge } from "../ui/badge"
 import { formatEther } from "ethers"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { cn } from "@/lib/utils"
 
 interface Props {
   service: Service
+  clickable?: boolean
 }
 
-const ServiceCard: FC<Props> = ({ service }) => {
+const ServiceCard: FC<Props> = ({ service, clickable = true }) => {
   const subscribe = async () => {
     console.log("Subscribing to service", service)
   }
-  
+
   return (
-    <Card className="cursor-pointer hover:border-primary transition-all duration-300" onClick={subscribe}>
+    <Card
+      className={cn('', {[`cursor-pointer hover:border-primary transition-all duration-300`]: clickable})}
+      onClick={clickable ? subscribe : undefined}
+    >
       <CardHeader>
         <div className="flex items-center gap-2">
           <Avatar>
