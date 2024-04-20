@@ -43,7 +43,7 @@ const Root: FC = () => {
         {address ? (
           <Wrapper>
             <LLMInput />
-            <Tabs defaultValue="services" className="w-[400px]">
+            <Tabs defaultValue="services" className="w-full">
               <TabsList>
                 <TabsTrigger value="services">All Services</TabsTrigger>
                 <TabsTrigger value="subscriptions">
@@ -54,10 +54,12 @@ const Root: FC = () => {
                 {Object.keys(allServices || {}).length === 0 ? (
                   <Notice text="There are currently no services available" />
                 ) : (
-                  allServices?.map((service: Service) => (
-                    <ServiceCard key={service.serviceId} service={service} />
-                  ))
-                )}{" "}
+                  <div className="flex flex-col gap-2">
+                    {allServices?.map((service: Service) => (
+                      <ServiceCard key={service.serviceId} service={service} />
+                    ))}
+                  </div>
+                )}
               </TabsContent>
               <TabsContent value="subscriptions">
                 Change your password here.
