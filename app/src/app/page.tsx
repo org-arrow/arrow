@@ -5,11 +5,14 @@ import LLMInput from "@/components/custom/llm-input"
 import ScanDropdown from "@/components/custom/scan-dropdown"
 import Wrapper from "@/components/custom/wrapper"
 import useConnectWallet from "@/hooks/useConnectWallet"
+import useView from "@/hooks/useView"
 import { FC, useState } from "react"
 
 const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
   const { address, connect } = useConnectWallet()
+
+  const {data} = useView("getLLM", [address])
 
   return (
     <Wrapper className="p-8 max-w-md mx-auto">
