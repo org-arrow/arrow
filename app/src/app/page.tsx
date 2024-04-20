@@ -7,13 +7,20 @@ import ServiceCard from "@/components/custom/service-card"
 import Wrapper from "@/components/custom/wrapper"
 import useConnectWallet from "@/hooks/useConnectWallet"
 import useView from "@/hooks/useView"
-import { FC, useState } from "react"
+import { getContract } from "@/utils/provider"
+import { FC, useEffect, useState } from "react"
 
 const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
   const { address, connect } = useConnectWallet()
 
   const { data: allServices } = useView("getAllServices", [])
+
+  useEffect(() => {
+    ;(async () => {
+      const contract = await getContract()
+    })()
+  }, [qrcodeResult])
 
   return (
     <Wrapper className="p-8 max-w-md mx-auto">
