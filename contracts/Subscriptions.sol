@@ -101,6 +101,7 @@ contract Subscription is Ownable {
         }
     }
 
+    // TODO: LOGIC TO SWAP TOKENS TO PREFERRED TOKEN
     function collect(uint256 _serviceId) external onlyOwner {
         for (uint256 i = 0; i < subscribers.length; i++) {
             address subscriber = subscribers[i];
