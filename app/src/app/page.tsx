@@ -3,54 +3,66 @@
 import ConfirmSubscription from "@/components/custom/confirm-subscription"
 import Header from "@/components/custom/header"
 import LLMInput from "@/components/custom/llm-input"
+import Notice from "@/components/custom/notice"
 import ScanDropdown from "@/components/custom/scan-dropdown"
 import ServiceCard from "@/components/custom/service-card"
 import Wrapper from "@/components/custom/wrapper"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-} from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import useConnectWallet from "@/hooks/useConnectWallet"
 import useView from "@/hooks/useView"
-import { getContract } from "@/utils/provider"
-import { DialogTitle } from "@radix-ui/react-dialog"
 import { FC, useEffect, useState } from "react"
 
 const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
   const { address, connect } = useConnectWallet()
 
-  const { data: allServices } = useView("getAllServices", [])
+  const { data: allServices }: { data: Service[] | undefined } = useView(
+    "getAllServices",
+    []
+  )
 
   useEffect(() => {
-    ;(async () => {
-      const contract = await getContract()
-    })()
+    if (qrcodeResult) {
+      setTimeout(() => {
+        // Code to be executed after 20 second
+        setQrcodeResult("")
+      }, 20000)
+    }
   }, [qrcodeResult])
 
   return (
     <>
-      {allServices && <ConfirmSubscription
-        isOpen={!qrcodeResult}
-        onOpenChange={() => setQrcodeResult("")}
-        service={allServices?.[0]}
-      />}
+      {allServices && (
+        <ConfirmSubscription
+          isOpen={!!qrcodeResult}
+          service={allServices?.[0]}
+        />
+      )}
       <Wrapper className="p-8 max-w-md mx-auto">
         <Header address={address} connect={connect} />
         {address ? (
           <Wrapper>
             <LLMInput />
-            {Object.keys(allServices || {}).length === 0 ? (
-              <div className="flex items-center justify-center p-10 border rounded-md text-sm text-gray-600 font-bold">
-                There are currently no services available
-              </div>
-            ) : (
-              allServices?.map((service: Service) => (
-                <ServiceCard key={service.serviceId} service={service} />
-              ))
-            )}
+            <Tabs defaultValue="services" className="w-[400px]">
+              <TabsList>
+                <TabsTrigger value="services">All Services</TabsTrigger>
+                <TabsTrigger value="subscriptions">
+                  My Subscriptions
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="services">
+                {Object.keys(allServices || {}).length === 0 ? (
+                  <Notice text="There are currently no services available" />
+                ) : (
+                  allServices?.map((service: Service) => (
+                    <ServiceCard key={service.serviceId} service={service} />
+                  ))
+                )}{" "}
+              </TabsContent>
+              <TabsContent value="subscriptions">
+                Change your password here.
+              </TabsContent>
+            </Tabs>
           </Wrapper>
         ) : (
           <div className="flex items-center justify-center p-10 border rounded-md text-sm text-gray-600 font-bold">

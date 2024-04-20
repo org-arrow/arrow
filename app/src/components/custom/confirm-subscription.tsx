@@ -5,6 +5,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "../ui/dialog"
 import ServiceCard from "./service-card"
 import {
@@ -24,12 +25,12 @@ import { CheckIcon } from "@radix-ui/react-icons"
 import { truncateAddress } from "@/utils/format"
 
 interface Props {
-  isOpen: boolean
-  onOpenChange: () => void
+  isOpen?: boolean
   service: Service
+  children?: React.ReactNode
 }
 
-const ConfirmSubscription: FC<Props> = ({ isOpen, onOpenChange, service }) => {
+const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
   const [subscriptionToken, setSubscriptionToken] = useState("")
   const [durationAmount, setDurationAmount] = useState<number>()
   const [durationPeriod, setDurationPeriod] = useState("")
@@ -52,7 +53,8 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, onOpenChange, service }) => {
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen ? true : undefined}>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       {!tx ? (
         <DialogContent className="w-96 rounded-md text-sm font-bold">
           <DialogHeader>
