@@ -79,7 +79,7 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
                   <SelectItem value="usdt">USDT</SelectItem>
                   <SelectItem value="eth">ETH</SelectItem>
                   <SelectItem value="arb">ARB</SelectItem>
-                  <SelectItem value="arb">WBTC</SelectItem>
+                  <SelectItem value="wbtc">WBTC</SelectItem>
                 </SelectContent>
               </SelectGroup>
             </Select>

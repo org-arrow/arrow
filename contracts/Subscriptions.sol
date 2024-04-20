@@ -86,6 +86,9 @@ contract Subscription is Ownable {
             )
         );
         subscribers.push(msg.sender);
+
+        service.subscribers += 1;
+        services[_serviceId] = service;
     }
 
     function unsubscribe(uint256 _serviceId) external {
@@ -101,6 +104,10 @@ contract Subscription is Ownable {
                 break;
             }
         }
+
+        Service memory service = services[_serviceId];
+        service.subscribers -= 1;
+        services[_serviceId] = service;
     }
 
     // TODO: LOGIC TO SWAP TOKENS TO PREFERRED TOKEN
