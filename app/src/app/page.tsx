@@ -6,6 +6,7 @@ import LLMInput from "@/components/custom/llm-input"
 import Notice from "@/components/custom/notice"
 import ScanDropdown from "@/components/custom/scan-dropdown"
 import ServiceCard from "@/components/custom/service-card"
+import SubscriptionCard from "@/components/custom/subscription-card"
 import Wrapper from "@/components/custom/wrapper"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import useConnectWallet from "@/hooks/useConnectWallet"
@@ -19,6 +20,11 @@ const Root: FC = () => {
   const { data: allServices }: { data: Service[] | undefined } = useView(
     "getAllServices",
     []
+  )
+
+  const { data: allSubscriptions }: { data: Subscription[] | undefined } = useView(
+    "getSubscriptions",
+    [address]
   )
 
   useEffect(() => {
@@ -62,7 +68,15 @@ const Root: FC = () => {
                 )}
               </TabsContent>
               <TabsContent value="subscriptions">
-                Change your password here.
+              {Object.keys(allSubscriptions || {}).length === 0 ? (
+                <Notice text="You current have no active subscriptions" />
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {allSubscriptions?.map((subscription: Subscription) => (
+                      <SubscriptionCard key={subscription.serviceId} subscription={subscription} />
+                    ))}
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
           </Wrapper>

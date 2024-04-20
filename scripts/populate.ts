@@ -5,7 +5,7 @@ task("populate", "Populate a contract with data.").setAction(
   async (_, { viem }) => {
     const contract = await viem.getContractAt(
       "Subscription",
-      "0x23e9603da9935efa6bec71cf744a47c3e8522be6"
+      "0xad6441e509db5255ad0cd959d151d665ffb01833"
     );
 
     const tx0 = await contract.write.createService([
@@ -19,8 +19,8 @@ task("populate", "Populate a contract with data.").setAction(
 
     console.log(tx0);
 
-    // Sleep for 5 seconds
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // Sleep for 10 seconds
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
     const tx1 = await contract.write.createService([
       "Amazon Prime",
@@ -41,7 +41,7 @@ task("populate", "Populate a contract with data.").setAction(
       "Subscription-based music streaming service",
       "https://logo.clearbit.com/spotify.com",
       parseEther("9.99"),
-      BigInt(0),
+      BigInt(30),
       true,
     ]);
 

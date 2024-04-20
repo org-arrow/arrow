@@ -9,3 +9,11 @@ type Service = {
   isPublic: boolean;
 }
 
+type Subscription = {
+  serviceId: bigint;
+  amount: bigint;
+  duration: bigint;
+  subscriptionPeriod: bigint;
+  lastPaidTime: bigint;
+  service: Service;
+}
