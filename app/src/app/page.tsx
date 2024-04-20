@@ -12,6 +12,7 @@ const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
   const { address, connect } = useConnectWallet()
 
+  
   const {data} = useView("getLLM", [address])
 
   return (

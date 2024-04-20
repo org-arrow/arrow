@@ -22,6 +22,7 @@ contract Subscription is Ownable {
         uint256 duration;
         uint256 subscriptionPeriod;
         uint256 lastPaidTime;
+        Service service;
     }
 
     IERC20 public token;
@@ -80,7 +81,8 @@ contract Subscription is Ownable {
                 service.subscriptionAmount,
                 service.subscriptionDuration,
                 _subscriptionPeriod,
-                block.timestamp
+                block.timestamp,
+                service
             )
         );
         subscribers.push(msg.sender);
@@ -128,6 +130,20 @@ contract Subscription is Ownable {
                 }
             }
         }
+    }
+
+    function getAllServices() external view returns (Service[] memory) {
+        Service[] memory _services = new Service[](serviceCount);
+        for (uint256 i = 0; i < serviceCount; i++) {
+            _services[i] = services[i];
+        }
+        return _services;
+    }
+
+    function getSubscriptions(
+        address _subscriber
+    ) external view returns (SubscriptionDetails[] memory) {
+        return subscriptions[_subscriber];
     }
 
     function _removeFailedTransaction(address subscriber) internal {
