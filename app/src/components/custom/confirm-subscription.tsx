@@ -21,7 +21,7 @@ import { SelectLabel } from "@radix-ui/react-select"
 import { Input } from "../ui/input"
 import { getContract } from "@/utils/provider"
 import { toast } from "sonner"
-import { CheckIcon } from "@radix-ui/react-icons"
+import { CheckIcon, Share2Icon } from "@radix-ui/react-icons"
 import { truncateAddress } from "@/utils/format"
 
 interface Props {
@@ -34,7 +34,9 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
   const [subscriptionToken, setSubscriptionToken] = useState("")
   const [durationAmount, setDurationAmount] = useState<number>()
   const [durationPeriod, setDurationPeriod] = useState("")
-  const [tx, setTx] = useState("")
+  const [tx, setTx] = useState(
+    "0xe2544344fe76900b577f45e2f6a303832eeb5965d39dd5e6c39c9234555868dc"
+  )
 
   const canSubscribe = subscriptionToken && durationAmount && durationPeriod
 
@@ -116,17 +118,30 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
               Subscription Successful
             </DialogTitle>
           </DialogHeader>
-          <DialogDescription className="flex flex-col gap-4 border border-secondary rounded-md p-8">
+          <DialogDescription className="flex flex-col gap-4 border border-secondary rounded-md p-6">
             <div className="flex items-center gap-2">
               <CheckIcon />
               <p>
                 View your transaction:{" "}
-                <a className="underline" href={`https://sepolia.etherscan.io/tx/${tx}`}>
+                <a
+                  className="underline"
+                  href={`https://sepolia.etherscan.io/tx/${tx}`}
+                >
                   {truncateAddress(tx)}
                 </a>
               </p>
             </div>
-
+            <a
+              className="w-full"
+              href="https://talk.online"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="flex gap-2 w-full">
+                <Share2Icon />
+                <p>Share on talk.online</p>
+              </Button>
+            </a>
           </DialogDescription>
         </DialogContent>
       )}
