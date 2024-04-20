@@ -36,7 +36,7 @@ contract Subscription is Ownable {
 
     modifier serviceExists(uint256 _serviceId) {
         require(
-            serviceCount < _serviceId,
+            serviceCount > _serviceId,
             "serviceExists::service does not exist"
         );
         _;
