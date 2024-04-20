@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link"
 import { CircleUser, Menu, Package2, Search } from "lucide-react"
 
@@ -13,8 +15,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { FC } from "react"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 const Header: FC = () => {
+  const pathname = usePathname()
+
   return (
     <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
@@ -26,8 +32,8 @@ const Header: FC = () => {
           <span className="sr-only">Acme Inc</span>
         </Link>
         <Link
-          href="#"
-          className="text-foreground transition-colors hover:text-foreground"
+          href="/dashboard"
+          className={cn(`text-muted-foreground transition-colors hover:text-foreground`, { "text-foreground": pathname === `/dashboard` })}
         >
           Dashboard
         </Link>
@@ -38,10 +44,10 @@ const Header: FC = () => {
           Orders
         </Link>
         <Link
-          href="#"
-          className="text-muted-foreground transition-colors hover:text-foreground"
+          href="/services"
+          className={cn(`text-muted-foreground transition-colors hover:text-foreground`, { "text-foreground": pathname === `/services` })}
         >
-          Products
+          Services
         </Link>
         <Link
           href="#"
@@ -72,7 +78,7 @@ const Header: FC = () => {
               <Package2 className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </Link>
-            <Link href="#" className="hover:text-foreground">
+            <Link href="/dashboard" className="hover:text-foreground">
               Dashboard
             </Link>
             <Link
@@ -82,10 +88,10 @@ const Header: FC = () => {
               Orders
             </Link>
             <Link
-              href="#"
+              href="/services"
               className="text-muted-foreground hover:text-foreground"
             >
-              Products
+              Services
             </Link>
             <Link
               href="#"

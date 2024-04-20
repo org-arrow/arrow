@@ -34,7 +34,7 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
   const [subscriptionToken, setSubscriptionToken] = useState("")
   const [durationAmount, setDurationAmount] = useState<number>()
   const [durationPeriod, setDurationPeriod] = useState("")
-  const [tx, setTx] = useState("yu")
+  const [tx, setTx] = useState("")
 
   const canSubscribe = subscriptionToken && durationAmount && durationPeriod
 
