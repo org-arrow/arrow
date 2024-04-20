@@ -9,7 +9,7 @@ interface Artifact {
 
 export const Contracts: Artifact = {
   11155111: {
-    address: "0xd91d6b784f603ca15742fcfdce06496620a62fcf",
+    address: "0xa9124a6a8d67e0ed14c04f63348a9241529233a7",
     abi: [
       {
         inputs: [
@@ -128,6 +128,154 @@ export const Contracts: Artifact = {
             internalType: "address",
             name: "",
             type: "address",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [],
+        name: "getAllServices",
+        outputs: [
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "serviceId",
+                type: "uint256",
+              },
+              {
+                internalType: "string",
+                name: "name",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "description",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "url",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "subscribers",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "subscriptionAmount",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "subscriptionDuration",
+                type: "uint256",
+              },
+              {
+                internalType: "bool",
+                name: "isPublic",
+                type: "bool",
+              },
+            ],
+            internalType: "struct Subscription.Service[]",
+            name: "",
+            type: "tuple[]",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "_subscriber",
+            type: "address",
+          },
+        ],
+        name: "getSubscriptions",
+        outputs: [
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "serviceId",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "duration",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "subscriptionPeriod",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "lastPaidTime",
+                type: "uint256",
+              },
+              {
+                components: [
+                  {
+                    internalType: "uint256",
+                    name: "serviceId",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "string",
+                    name: "name",
+                    type: "string",
+                  },
+                  {
+                    internalType: "string",
+                    name: "description",
+                    type: "string",
+                  },
+                  {
+                    internalType: "string",
+                    name: "url",
+                    type: "string",
+                  },
+                  {
+                    internalType: "uint256",
+                    name: "subscribers",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "uint256",
+                    name: "subscriptionAmount",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "uint256",
+                    name: "subscriptionDuration",
+                    type: "uint256",
+                  },
+                  {
+                    internalType: "bool",
+                    name: "isPublic",
+                    type: "bool",
+                  },
+                ],
+                internalType: "struct Subscription.Service",
+                name: "service",
+                type: "tuple",
+              },
+            ],
+            internalType: "struct Subscription.SubscriptionDetails[]",
+            name: "",
+            type: "tuple[]",
           },
         ],
         stateMutability: "view",
@@ -296,6 +444,53 @@ export const Contracts: Artifact = {
             internalType: "uint256",
             name: "lastPaidTime",
             type: "uint256",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "serviceId",
+                type: "uint256",
+              },
+              {
+                internalType: "string",
+                name: "name",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "description",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "url",
+                type: "string",
+              },
+              {
+                internalType: "uint256",
+                name: "subscribers",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "subscriptionAmount",
+                type: "uint256",
+              },
+              {
+                internalType: "uint256",
+                name: "subscriptionDuration",
+                type: "uint256",
+              },
+              {
+                internalType: "bool",
+                name: "isPublic",
+                type: "bool",
+              },
+            ],
+            internalType: "struct Subscription.Service",
+            name: "service",
+            type: "tuple",
           },
         ],
         stateMutability: "view",

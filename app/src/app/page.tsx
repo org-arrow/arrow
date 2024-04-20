@@ -12,8 +12,9 @@ const Root: FC = () => {
   const [qrcodeResult, setQrcodeResult] = useState("")
   const { address, connect } = useConnectWallet()
 
-  
-  const {data} = useView("getLLM", [address])
+  const { data: allServices } = useView("getAllServices", [])
+
+  console.log(allServices)
 
   return (
     <Wrapper className="p-8 max-w-md mx-auto">

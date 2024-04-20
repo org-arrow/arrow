@@ -3,6 +3,7 @@ import "dotenv/config";
 import { HardhatUserConfig } from "hardhat/config";
 import "./scripts/deploy";
 import "./scripts/generate";
+import "./scripts/populate";
 
 const accounts = process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [];
 
