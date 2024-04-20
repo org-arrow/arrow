@@ -5,7 +5,7 @@ task("populate", "Populate a contract with data.").setAction(
   async (_, { viem }) => {
     const contract = await viem.getContractAt(
       "Subscription",
-      "0x5fd2aef63414a610f996abf0e540583e4142b922"
+      "0x23e9603da9935efa6bec71cf744a47c3e8522be6"
     );
 
     const tx0 = await contract.write.createService([
