@@ -8,28 +8,28 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { FC, useState } from "react"
-import useSpeechToText from "react-hook-speech-to-text"
+// import useSpeechToText from "react-hook-speech-to-text"
 import { getContract } from "@/utils/provider"
 import { toast } from "sonner"
 
 const LLMInput: FC = () => {
   const [prompt, setPrompt] = useState<string>("")
 
-  const { interimResult, isRecording, startSpeechToText, stopSpeechToText } =
-    useSpeechToText({
-      continuous: true,
-      useLegacyResults: false,
-    })
+  // const { interimResult, isRecording, startSpeechToText, stopSpeechToText } =
+  //   useSpeechToText({
+  //     continuous: true,
+  //     useLegacyResults: false,
+  //   })
 
-  const toggleRecording = () =>
-    isRecording ? stopSpeechToText() : startSpeechToText()
+  // const toggleRecording = () =>
+  //   isRecording ? stopSpeechToText() : startSpeechToText()
 
   const sendPrompt = async () => {
     const contract = await getContract()
 
     await contract
       .subscribe(0, 3)
-      .then((tx) => {
+      .then(() => {
         toast.success(`You have just subscribed to service`)
       })
       .catch((e) => toast.error(e))
@@ -42,7 +42,7 @@ const LLMInput: FC = () => {
       </Label>
       <Textarea
         id="message"
-        value={interimResult}
+        value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="Enter prompt here..."
         className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
@@ -52,7 +52,7 @@ const LLMInput: FC = () => {
           <Paperclip className="size-4" />
           <span className="sr-only">Attach file</span>
         </Button>
-        <Button variant="ghost" size="icon" onClick={toggleRecording}>
+        <Button variant="ghost" size="icon" >
           {<Mic className="size-4" />}
           <span className="sr-only">Use Microphone</span>
         </Button>

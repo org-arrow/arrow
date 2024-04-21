@@ -1,8 +1,8 @@
 {
-  "id": "app",
-  "name": "app",
-  "short_name": "app",
-  "description": "description",
+  "id": "arrow",
+  "name": "Arrow",
+  "short_name": "Arrow",
+  "description": "Native web3 recurring subscription platform built with AI.",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

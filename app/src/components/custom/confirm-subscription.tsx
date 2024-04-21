@@ -63,7 +63,7 @@ const ConfirmSubscription: FC<Props> = ({ isOpen, service, children }) => {
 
     await talkOnlineContract
       .createPost(
-        `I just subscribed to ${service.name} for ${durationAmount} ${Period[durationPeriod as keyof typeof Period]} using the hottest new subscription service on the blockchain: https://todo.com`,
+        `I just subscribed to ${service.name} for ${durationAmount} ${Period[durationPeriod as keyof typeof Period]} using the hottest new subscription service on the blockchain: https://arrow-org.vercel.app`,
         0
       )
       .then(() => {
