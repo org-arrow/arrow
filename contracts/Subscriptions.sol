@@ -4,6 +4,9 @@ pragma solidity ^0.8.24;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+// import "./interface/IOceanInteractions.sol";
+// import "./interface/IOceanPrimitive.sol";
+
 contract Subscription is Ownable {
     struct Service {
         uint256 serviceId;
@@ -26,6 +29,9 @@ contract Subscription is Ownable {
     }
 
     IERC20 public token;
+    // IOceanInteractions public oceanInteractions;
+    // IOceanPrimitive public adapter;
+
     uint256 public serviceCount;
 
     address[] public subscribers;
@@ -42,9 +48,17 @@ contract Subscription is Ownable {
         _;
     }
 
-    constructor(IERC20 _token) Ownable(msg.sender) {
+    constructor(
+        IERC20 _token
+    )
+        // , IOceanInteractions _oceanInteractions
+        // , IOceanPrimitive _oceanPrimitive
+        Ownable(msg.sender)
+    {
         token = _token;
         serviceCount = 0;
+        // oceanInteractions = _oceanInteractions;
+        // adapter = _oceanPrimitive;
     }
 
     function createService(
@@ -110,7 +124,6 @@ contract Subscription is Ownable {
         services[_serviceId] = service;
     }
 
-    // TODO: LOGIC TO SWAP TOKENS TO PREFERRED TOKEN
     function collect(uint256 _serviceId) external onlyOwner {
         for (uint256 i = 0; i < subscribers.length; i++) {
             address subscriber = subscribers[i];
@@ -122,6 +135,7 @@ contract Subscription is Ownable {
                     block.timestamp &&
                     details[j].subscriptionPeriod > 0
                 ) {
+                    // swapBack(token, preferredToken, details[j].amount, unwrapFee);
                     bool success = token.transferFrom(
                         subscriber,
                         msg.sender,
@@ -138,6 +152,41 @@ contract Subscription is Ownable {
             }
         }
     }
+
+    // function swapBack(address inputAddress, address outputAddress, uint256 amount) internal {
+    //     IERC20(inputAddress).approve(address(oceanInteractions), amount);
+
+    //     Interaction[] memory interactions = new Interaction[](3);
+
+    //     interactions[0] = Interaction({ interactionTypeAndAddress: _fetchInteractionId(inputAddress, uint256(InteractionType.WrapErc20)), inputToken: 0, outputToken: 0, specifiedAmount: amount, metadata: bytes32(0) });
+
+    //     interactions[1] = Interaction({
+    //         interactionTypeAndAddress: _fetchInteractionId(address(adapter), uint256(InteractionType.ComputeOutputAmount)),
+    //         inputToken: _calculateOceanId(inputAddress),
+    //         outputToken: _calculateOceanId(outputAddress),
+    //         specifiedAmount: type(uint256).max,
+    //         metadata: bytes32(0)
+    //     });
+
+    //     interactions[2] = Interaction({ interactionTypeAndAddress: _fetchInteractionId(outputAddress, uint256(InteractionType.UnwrapErc20)), inputToken: 0, outputToken: 0, specifiedAmount: type(uint256).max, metadata: bytes32(0) });
+
+    //     // erc1155 token id's for balance delta
+    //     uint256[] memory ids = new uint256[](2);
+    //     ids[0] = _calculateOceanId(inputAddress);
+    //     ids[1] = _calculateOceanId(outputAddress);
+
+    //     oceanInteractions.doMultipleInteractions(interactions, ids);
+    // }
+
+    //  function _calculateOceanId(address tokenAddress) internal pure returns (uint256) {
+    //     return uint256(keccak256(abi.encodePacked(tokenAddress, uint256(0))));
+    // }
+
+    // function _fetchInteractionId(address token, uint256 interactionType) internal pure returns (bytes32) {
+    //     uint256 packedValue = uint256(uint160(token));
+    //     packedValue |= interactionType << 248;
+    //     return bytes32(abi.encode(packedValue));
+    // }
 
     function getAllServices() external view returns (Service[] memory) {
         Service[] memory _services = new Service[](serviceCount);
