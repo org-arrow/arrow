@@ -36,7 +36,7 @@ const Root: FC = () => {
 
   return (
     <>
-      {allServices && (
+      {allServices && allServices.length > Number(qrcodeResult) && (
         <ConfirmSubscription
           isOpen={!!qrcodeResult}
           service={allServices?.[Number(qrcodeResult)]}

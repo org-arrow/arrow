@@ -29,7 +29,11 @@ const ServiceCard: FC<Props> = ({ service, clickable = true }) => {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Avatar>
-              <AvatarImage width={14} height={14} src={service.url} />
+              <AvatarImage
+                width={14}
+                height={14}
+                src={`https://logo.clearbit.com/${service.url}`}
+              />
               <AvatarFallback>{service.name}</AvatarFallback>
             </Avatar>
 

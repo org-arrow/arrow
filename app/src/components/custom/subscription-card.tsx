@@ -41,7 +41,7 @@ const SubscriptionCard: FC<Props> = ({ subscription }) => {
               <AvatarImage
                 width={14}
                 height={14}
-                src={subscription.service.url}
+                src={`https://logo.clearbit.com/${subscription.service.url}`}
               />
               <AvatarFallback>{subscription.service.name}</AvatarFallback>
             </Avatar>

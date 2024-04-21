@@ -78,6 +78,19 @@ const Dashboard06: FC = () => {
       })
   }
 
+  const collect = async (serviceId: number) => {
+    const contract = await getContract()
+
+    await contract
+      .collect(serviceId)
+      .then(() => {
+        toast.success("Service collected successfully")
+      })
+      .catch((error) => {
+        toast.error(`Service collection failed: ${error}`)
+      })
+  }
+
   return (
     <Wrapper>
       <Card className="m-6">
@@ -208,14 +221,14 @@ const Dashboard06: FC = () => {
             </TableHeader>
             <TableBody>
               {allServices?.map((service: Service) => (
-                <TableRow
-                  className="cursor-pointer"
-                  key={service.serviceId}
-                  onClick={() => console.log("clicked")}
-                >
+                <TableRow key={service.serviceId}>
                   <TableCell className="hidden sm:table-cell">
                     <Avatar>
-                      <AvatarImage width={14} height={14} src={service.url} />
+                      <AvatarImage
+                        width={14}
+                        height={14}
+                        src={`https://logo.clearbit.com/${service.url}`}
+                      />
                       <AvatarFallback>{service.name}</AvatarFallback>
                     </Avatar>
                   </TableCell>
@@ -251,6 +264,11 @@ const Dashboard06: FC = () => {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem>Edit</DropdownMenuItem>
                           <DropdownMenuItem>Delete</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => collect(Number(service.serviceId))}
+                          >
+                            Collect
+                          </DropdownMenuItem>
                           <DialogTrigger className="w-full">
                             <DropdownMenuItem>Qrcode</DropdownMenuItem>
                           </DialogTrigger>

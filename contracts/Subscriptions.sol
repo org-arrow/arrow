@@ -131,20 +131,21 @@ contract Subscription is Ownable {
             for (uint256 j = 0; j < details.length; j++) {
                 if (
                     details[j].serviceId == _serviceId &&
-                    details[j].lastPaidTime + details[j].duration <=
-                    block.timestamp &&
+                    // Remove the comment for the demo
+                    // details[j].lastPaidTime + details[j].duration <=
+                    // block.timestamp &&
                     details[j].subscriptionPeriod > 0
                 ) {
                     // swapBack(token, preferredToken, details[j].amount, unwrapFee);
                     bool success = token.transferFrom(
                         subscriber,
-                        msg.sender,
+                        address(this),
                         details[j].amount
                     );
                     if (success) {
                         details[j].lastPaidTime = block.timestamp;
                         details[j].subscriptionPeriod -= 1;
-                        _removeFailedTransaction(subscriber);
+                        // _removeFailedTransaction(subscriber);
                     } else {
                         failedTransactions.push(subscriber);
                     }
