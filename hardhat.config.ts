@@ -22,6 +22,10 @@ const config: HardhatUserConfig = {
       url: process.env.MUMBAI_RPC_URL || "https://rpc.ankr.com/polygon_mumbai",
       accounts,
     },
+    galadriel: {
+      url: process.env.GALADRIEL_RPC_URL || "https://devnet.galadriel.com",
+      accounts,
+    },
   },
   etherscan: {
     apiKey: "YOUR_ETHERSCAN_API_KEY",

@@ -6,8 +6,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 // import "./interface/IOceanInteractions.sol";
 // import "./interface/IOceanPrimitive.sol";
+import "./interface/IOracle.sol";
 
 contract Subscription is Ownable {
+    struct Message {
+        string role;
+        string content;
+    }
+
+    struct ChatRun {
+        address owner;
+        Message[] messages;
+        uint messagesCount;
+    }
+
     struct Service {
         uint256 serviceId;
         string name;
@@ -29,16 +41,21 @@ contract Subscription is Ownable {
     }
 
     IERC20 public token;
+    address public constant ORACLE = 0x4168668812C94a3167FCd41D12014c5498D74d7e;
     // IOceanInteractions public oceanInteractions;
     // IOceanPrimitive public adapter;
 
     uint256 public serviceCount;
+    uint private chatRunsCount;
 
     address[] public subscribers;
     address[] public failedTransactions;
 
     mapping(address => SubscriptionDetails[]) public subscriptions;
     mapping(uint256 => Service) public services;
+    mapping(uint => ChatRun) public chatRuns;
+
+    event ChatCreated(address indexed owner, uint indexed chatId);
 
     modifier serviceExists(uint256 _serviceId) {
         require(
@@ -48,13 +65,9 @@ contract Subscription is Ownable {
         _;
     }
 
-    constructor(
-        IERC20 _token
-    )
-        // , IOceanInteractions _oceanInteractions
-        // , IOceanPrimitive _oceanPrimitive
-        Ownable(msg.sender)
-    {
+    // , IOceanInteractions _oceanInteractions
+    // , IOceanPrimitive _oceanPrimitive
+    constructor(IERC20 _token) Ownable(msg.sender) {
         token = _token;
         serviceCount = 0;
         // oceanInteractions = _oceanInteractions;
@@ -122,6 +135,67 @@ contract Subscription is Ownable {
         Service memory service = services[_serviceId];
         service.subscribers -= 1;
         services[_serviceId] = service;
+    }
+
+    function startChat(string memory message) public returns (uint i) {
+        ChatRun storage run = chatRuns[chatRunsCount];
+
+        run.owner = msg.sender;
+        Message memory newMessage;
+        newMessage.content = message;
+        newMessage.role = "user";
+        run.messages.push(newMessage);
+        run.messagesCount = 1;
+
+        uint currentId = chatRunsCount;
+        chatRunsCount = chatRunsCount + 1;
+
+        IOracle(ORACLE).createLlmCall(currentId);
+        emit ChatCreated(msg.sender, currentId);
+
+        return currentId;
+    }
+
+    function onOracleLlmResponse(
+        uint runId,
+        string memory response,
+        string memory /*errorMessage*/
+    ) public {
+        ChatRun storage run = chatRuns[runId];
+        require(
+            keccak256(
+                abi.encodePacked(run.messages[run.messagesCount - 1].role)
+            ) == keccak256(abi.encodePacked("user")),
+            "No message to respond to"
+        );
+
+        Message memory newMessage;
+        newMessage.content = response;
+        newMessage.role = "assistant";
+        run.messages.push(newMessage);
+        run.messagesCount++;
+    }
+
+    function getMessageHistoryContents(
+        uint chatId
+    ) public view returns (string[] memory) {
+        string[] memory messages = new string[](
+            chatRuns[chatId].messages.length
+        );
+        for (uint i = 0; i < chatRuns[chatId].messages.length; i++) {
+            messages[i] = chatRuns[chatId].messages[i].content;
+        }
+        return messages;
+    }
+
+    function getMessageHistoryRoles(
+        uint chatId
+    ) public view returns (string[] memory) {
+        string[] memory roles = new string[](chatRuns[chatId].messages.length);
+        for (uint i = 0; i < chatRuns[chatId].messages.length; i++) {
+            roles[i] = chatRuns[chatId].messages[i].role;
+        }
+        return roles;
     }
 
     function collect(uint256 _serviceId) external onlyOwner {

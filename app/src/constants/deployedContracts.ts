@@ -1,10 +1,10 @@
-import { InterfaceAbi } from "ethers";
+import { InterfaceAbi } from "ethers"
 
 interface Artifact {
   [key: string]: {
-    address: `0x${string}`;
-    abi: InterfaceAbi;
-  };
+    address: `0x${string}`
+    abi: InterfaceAbi
+  }
 }
 
 export const Contracts: Artifact = {
@@ -50,6 +50,25 @@ export const Contracts: Artifact = {
           {
             indexed: true,
             internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            indexed: true,
+            internalType: "uint256",
+            name: "chatId",
+            type: "uint256",
+          },
+        ],
+        name: "ChatCreated",
+        type: "event",
+      },
+      {
+        anonymous: false,
+        inputs: [
+          {
+            indexed: true,
+            internalType: "address",
             name: "previousOwner",
             type: "address",
           },
@@ -62,6 +81,43 @@ export const Contracts: Artifact = {
         ],
         name: "OwnershipTransferred",
         type: "event",
+      },
+      {
+        inputs: [],
+        name: "ORACLE",
+        outputs: [
+          {
+            internalType: "address",
+            name: "",
+            type: "address",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        name: "chatRuns",
+        outputs: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "messagesCount",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
       },
       {
         inputs: [
@@ -191,6 +247,44 @@ export const Contracts: Artifact = {
       {
         inputs: [
           {
+            internalType: "uint256",
+            name: "chatId",
+            type: "uint256",
+          },
+        ],
+        name: "getMessageHistoryContents",
+        outputs: [
+          {
+            internalType: "string[]",
+            name: "",
+            type: "string[]",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "chatId",
+            type: "uint256",
+          },
+        ],
+        name: "getMessageHistoryRoles",
+        outputs: [
+          {
+            internalType: "string[]",
+            name: "",
+            type: "string[]",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
             internalType: "address",
             name: "_subscriber",
             type: "address",
@@ -282,6 +376,29 @@ export const Contracts: Artifact = {
         type: "function",
       },
       {
+        inputs: [
+          {
+            internalType: "uint256",
+            name: "runId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "response",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "",
+            type: "string",
+          },
+        ],
+        name: "onOracleLlmResponse",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
         inputs: [],
         name: "owner",
         outputs: [
@@ -366,6 +483,25 @@ export const Contracts: Artifact = {
           },
         ],
         stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "string",
+            name: "message",
+            type: "string",
+          },
+        ],
+        name: "startChat",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "i",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "nonpayable",
         type: "function",
       },
       {
@@ -537,4 +673,4 @@ export const Contracts: Artifact = {
       },
     ],
   },
-};
+}
