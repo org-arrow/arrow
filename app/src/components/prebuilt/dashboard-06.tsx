@@ -44,14 +44,27 @@ import { Checkbox } from "../ui/checkbox"
 import { getContract } from "@/utils/provider"
 import { toast } from "sonner"
 import QrCode from "react-qr-code"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select"
+import { Toggle } from "../ui/toggle"
+import { Switch } from "../ui/switch"
 
 const Dashboard06: FC = () => {
   const [serviceName, setServiceName] = useState("")
   const [serviceDescription, setServiceDescription] = useState("")
   const [serviceUrl, setServiceUrl] = useState("")
+  const [subscriptionToken, setSubscriptionToken] = useState("")
   const [subscriptionAmount, setSubscriptionAmount] = useState<number>()
   const [subscriptionDuration, setSubscriptionDuration] = useState<number>()
   const [isPublic, setIsPublic] = useState<boolean>(false)
+  const [isToggled, setIsToggled] = useState<boolean>(false)
 
   const { data: allServices }: { data: Service[] | undefined } = useView(
     "getAllServices",
@@ -194,6 +207,38 @@ const Dashboard06: FC = () => {
                   >
                     Make this service public
                   </label>
+                </div>
+
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <Label htmlFor="airplane-mode">
+                      Accumulate to a consolidation token
+                    </Label>
+                    <Switch
+                      id="airplane-mode"
+                      checked={isToggled}
+                      onCheckedChange={(e) => setIsToggled(e)}
+                    />
+                  </div>
+                  {isToggled && (
+                    <Select
+                      value={subscriptionToken}
+                      onValueChange={(e) => setSubscriptionToken(e)}
+                    >
+                      <SelectGroup>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a consolidation token..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="usdc">USDC</SelectItem>
+                          <SelectItem value="usdt">USDT</SelectItem>
+                          <SelectItem value="eth">ETH</SelectItem>
+                          <SelectItem value="arb">ARB</SelectItem>
+                          <SelectItem value="wbtc">WBTC</SelectItem>
+                        </SelectContent>
+                      </SelectGroup>
+                    </Select>
+                  )}
                 </div>
               </div>
               <Button onClick={createService}>Create Service</Button>

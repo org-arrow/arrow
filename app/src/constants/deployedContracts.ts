@@ -1,15 +1,15 @@
-import { InterfaceAbi } from "ethers"
+import { InterfaceAbi } from "ethers";
 
 interface Artifact {
   [key: string]: {
-    address: `0x${string}`
-    abi: InterfaceAbi
-  }
+    address: `0x${string}`;
+    abi: InterfaceAbi;
+  };
 }
 
 export const Contracts: Artifact = {
   11155111: {
-    address: "0x521ce7be92a14b0e344a3f58514642b842b54948",
+    address: "0x3ae2bb60e7ef4b1f4b338c839adfd230a3bd9492",
     abi: [
       {
         inputs: [
@@ -673,4 +673,4 @@ export const Contracts: Artifact = {
       },
     ],
   },
-}
+};
